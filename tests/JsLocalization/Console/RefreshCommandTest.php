@@ -14,15 +14,19 @@ class RefreshCommandTest extends TestCase
 
     public function testNoLocalesConfigException()
     {
-        // Mock Config
-        Illuminate\Support\Facades\Config::swap($config = m::mock('ConfigMock'));
-
-        $config->shouldReceive('get')->with('js-localization.locales')
-          ->andReturn(null);
-
         $this->expectException(Exception::class);
 
-        $this->runCommand();
+        // Run the command directly to avoid Config mock conflicts with testbench
+        $cmd = new JsLocalization\Console\RefreshCommand();
+        $cmd->setLaravel(app(\Illuminate\Contracts\Foundation\Application::class));
+
+        // Override just the locales config to null
+        Config::set('js-localization.locales', null);
+
+        $cmd->run(
+            new Symfony\Component\Console\Input\ArrayInput([]),
+            new Symfony\Component\Console\Output\NullOutput()
+        );
     }
 
     protected function runCommand()
@@ -33,7 +37,7 @@ class RefreshCommandTest extends TestCase
 
         $cmd->run(
             new Symfony\Component\Console\Input\ArrayInput([]),
-            new Symfony\Component\Console\Output\NullOutput
+            new Symfony\Component\Console\Output\NullOutput()
         );
     }
 
