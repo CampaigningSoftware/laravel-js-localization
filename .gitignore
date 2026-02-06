@@ -1,6 +1,7 @@
 /node_modules
 /vendor
 _ide_fix.php
+composer.lock
 composer.phar
 .DS_Store
 .idea
