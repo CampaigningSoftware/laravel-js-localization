@@ -54,13 +54,13 @@ class MessageCachingServiceTest extends TestCase
 
     public function testRefreshMessageCacheEvent()
     {
-        $this->addToAssertionCount(
-            \Mockery::getContainer()->mockery_getExpectationCount()
-        );
-
         Event::shouldReceive('dispatch')->once()->with('JsLocalization.registerMessages');
 
         MessageCachingService::refreshCache();
+
+        $this->addToAssertionCount(
+            \Mockery::getContainer()->mockery_getExpectationCount()
+        );
     }
 
     private function assertMessagesJsonEquals(array $expectedMessages)
